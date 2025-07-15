@@ -351,10 +351,10 @@ nav {
     opacity: 0.5;
 }
 
-journals_footer span a {
-    font-size: 1.5rem;
-    color: var(--white);
-    opacity: 0.75;
+.journals_footer span a {
+  font-size: 1.5rem;
+  color: var(--white);
+  opacity: 0.75;
 }
 
 .journals_btn {
