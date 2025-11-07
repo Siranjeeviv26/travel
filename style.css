@@ -82,6 +82,10 @@ nav {
     border-bottom: 1px solid var(--extra-light);
 }
 
+nav {
+    z-index: 1000; /* keep nav above content */
+}
+
 .nav_bar {
     max-width: var(--max-width);
     margin: auto;
@@ -103,6 +107,15 @@ nav {
     display: flex;
     align-items: center;
     gap: 2rem;
+}
+
+.nav_toggle {
+    display: none;
+    background: transparent;
+    border: none;
+    color: var(--white);
+    font-size: 1.5rem;
+    cursor: pointer;
 }
 
 .link a {
@@ -351,15 +364,54 @@ nav {
     opacity: 0.5;
 }
 
-.journals_footer span a {
-  font-size: 1.5rem;
-  color: var(--white);
-  opacity: 0.75;
+journals_footer span a {
+    font-size: 1.5rem;
+    color: var(--white);
+    opacity: 0.75;
 }
 
 .journals_btn {
     margin-top: 4rem;
     text-align: center;
+}
+
+/* Journals hover effect: lift, image zoom and reveal content */
+.journals_card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.journals_card img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: transform 0.5s ease;
+}
+
+.journals_content {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -100%; /* hidden by default */
+    padding: 1.5rem;
+    background-image: linear-gradient(to top, rgba(10,13,20,0.9), rgba(10,13,20,0.45));
+    transition: bottom 0.35s ease;
+    z-index: 2;
+}
+
+.journals_card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.55);
+}
+
+.journals_card:hover img {
+    transform: scale(1.06);
+}
+
+.journals_card:hover .journals_content {
+    bottom: 0; /* reveal content */
 }
 
 /* Banner-CSS */
@@ -528,9 +580,48 @@ nav {
 
 /* Media-Size BreakPoint */
 
-@media (width < 900px) {
-    .link:not(.search) {
+@media (max-width: 900px) {
+    .nav_toggle {
+        display: block;
+    }
+
+    .nav_links {
         display: none;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        height: 100vh;
+        width: 75%;
+        max-width: 400px;
+        padding: 6rem 2rem;
+        background-color: var(--primary-color);
+        box-shadow: -8px 0 24px rgba(0,0,0,0.6);
+        z-index: 1000;
+        transition: right 0.3s ease-in-out;
+    }
+
+    .nav_links.active {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+        right: 0;
+    }
+
+    .nav_links .link a {
+        padding: 0.75rem 0;
+        font-size: 1.1rem;
+        display: block;
+        width: 100%;
+    }
+    
+    .link a:hover {
+        border-bottom: none;
+        padding-left: 0.5rem;
+    }
+
+    .search {
+        margin-top: auto;
     }
 
     .about_container {
@@ -577,48 +668,129 @@ nav {
     }
 }
 
-@media (width < 600px) {
+/* Additional intermediate breakpoint for better scaling */
+@media (max-width: 768px) {
+    .nav_bar {
+        padding: 1rem;
+    }
+
+    .nav_logo a {
+        font-size: 1.1rem;
+    }
+
+    .nav_links {
+        width: 85%;
+        padding: 5rem 1.5rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .nav_links {
+        width: 100%;
+    }
+
     .header_container {
         text-align: center;
+        padding: 8rem 1rem;
+    }
+
+    .header_container h1 {
+        font-size: 2.5rem;
+        line-height: 1.2;
     }
 
     .header_container h4 {
         margin-left: 0;
+        font-size: 0.9rem;
+    }
+
+    .section_header {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
     }
 
     .about_card {
         border: none;
+        padding: 1rem 0;
+    }
+
+    .about_card h4 {
+        font-size: 2rem;
     }
 
     .discover_grid {
         grid-template-columns: repeat(1, 1fr);
+        gap: 1.5rem;
     }
 
     .discover_card:nth-child(2) {
         transform: translateY(0);
     }
 
+    .discover_card_content {
+        padding: 0 1rem;
+    }
+
+    .discover_card_content h4 {
+        font-size: 1.5rem;
+    }
+
     .blogs_grid {
         grid-template-columns: repeat(1, 1fr);
+        gap: 1rem;
+    }
+
+    .blogs_content {
+        padding: 1.5rem;
+        font-size: 1rem;
     }
 
     .journals_grid {
         grid-template-columns: repeat(1, 1fr);
+        gap: 1.5rem;
+    }
+
+    .journals_content {
+        padding: 1.5rem;
     }
 
     .hero_container p {
-        font-size: 6rem;
+        font-size: 3.5rem;
+        -webkit-text-stroke: 0.5px var(--extra-light);
     }
 
     .gallery_grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+
+    .gallery_content {
+        padding: 1rem;
+    }
+
+    .gallery_content h4 {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
     }
 
     .contact_container {
         grid-template-columns: repeat(1, 1fr);
+        gap: 1.5rem;
     }
 
     .contact_col:first-child {
         grid-area: unset;
+    }
+
+    .contact_card {
+        padding: 2rem;
+    }
+
+    .footer_container {
+        padding: 3rem 1rem;
+    }
+
+    .footer_nav {
+        gap: 1rem;
     }
 }
